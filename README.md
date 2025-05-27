@@ -133,4 +133,3 @@ Subscription-Based-Model
 ## API Documentation
 
 Detailed API documentation can be found in the `docs` directory.
-```
