@@ -29,7 +29,7 @@ Each service follows a clean architecture pattern with:
 - **SQL Builder**: huandu/go-sqlbuilder
 
 ## Project Structure
-
+```
 Subscription-Based-Model
 ├─ README.md
 ├─ docs
