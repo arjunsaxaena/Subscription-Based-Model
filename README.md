@@ -85,7 +85,6 @@ Subscription-Based-Model
 
 - Go 1.24.2 or later
 - PostgreSQL
-- Make (optional, for using Makefile commands)
 
 ### Installation
 
