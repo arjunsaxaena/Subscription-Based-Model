@@ -1,0 +1,798 @@
+{
+	"info": {
+		"_postman_id": "51e40b2e-a303-4015-825f-edcdc18a2fc7",
+		"name": "QL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39713995"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8001/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjgxOWZkMzctZTAwNC00YjM4LWFjMTEtYmU2OTE4YjU4NjIyIiwiZW1haWwiOiJrcmlzaGl2c2F4ZW5hMDRAZ21haWwuY29tIiwiZXhwIjoxNzQ4NDY3MjI0LCJpYXQiOjE3NDgzODA4MjR9.a90YStCe-z_hxa5NcxTzGQyVxltkKWlsETPGBQzpomk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8001/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "91bc7a46-eb3e-4a70-9004-619794e7ad95",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "arjunsaxena04@gmail.com",
+									"disabled": true
+								},
+								{
+									"key": "is_active",
+									"value": "false",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"arjunsaxena04@gmail.com\",\n    \"password\": \"secure\",\n    \"name\": \"Arjun Saxena\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8001/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login-user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"arjunsaxena04@gmail.com\",\n    \"password\": \"secure\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8001/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWY1MWUzNGMtMjY1Yi00YjIxLWJiMjMtMGUyYmZhZTg2ODRmIiwiZW1haWwiOiJhcmp1bnNheGVuYTA0QGdtYWlsLmNvbSIsImV4cCI6MTc0ODQ2NzMzOSwiaWF0IjoxNzQ4MzgwOTM5fQ.L6-WodZezsxjt2psMPX0W7xUR1dmCxx7abuPUFcHEbY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"arjunsaxena04@gmail.com\",\n    \"password\": \"secure\",\n    \"name\": \"Not Arjun\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8001/users?id=2819fd37-e004-4b38-ac11-be6918b58622",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "2819fd37-e004-4b38-ac11-be6918b58622"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "authorization error",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"arjunsaxena04@gmail.com\",\n    \"password\": \"secure\",\n    \"name\": \"Not Arjun\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8001/users?id=2819fd37-e004-4b38-ac11-be6918b58622",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8001",
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "2819fd37-e004-4b38-ac11-be6918b58622"
+										}
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 27 May 2025 21:22:31 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "48"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"You can only update your own profile\"\n}"
+						}
+					]
+				},
+				{
+					"name": "delete-user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWY1MWUzNGMtMjY1Yi00YjIxLWJiMjMtMGUyYmZhZTg2ODRmIiwiZW1haWwiOiJhcmp1bnNheGVuYTA0QGdtYWlsLmNvbSIsImV4cCI6MTc0ODQ2NzMzOSwiaWF0IjoxNzQ4MzgwOTM5fQ.L6-WodZezsxjt2psMPX0W7xUR1dmCxx7abuPUFcHEbY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8001/users/2819fd37-e004-4b38-ac11-be6918b58622",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"users",
+								"2819fd37-e004-4b38-ac11-be6918b58622"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "authorization error",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8001/users/2819fd37-e004-4b38-ac11-be6918b58622",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8001",
+									"path": [
+										"users",
+										"2819fd37-e004-4b38-ac11-be6918b58622"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 27 May 2025 21:23:18 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "48"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"You can only delete your own profile\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Plans",
+			"item": [
+				{
+					"name": "health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8002/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8002",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-plans",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWY1MWUzNGMtMjY1Yi00YjIxLWJiMjMtMGUyYmZhZTg2ODRmIiwiZW1haWwiOiJhcmp1bnNheGVuYTA0QGdtYWlsLmNvbSIsImV4cCI6MTc0ODQ2NzMzOSwiaWF0IjoxNzQ4MzgwOTM5fQ.L6-WodZezsxjt2psMPX0W7xUR1dmCxx7abuPUFcHEbY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8002/plans",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8002",
+							"path": [
+								"plans"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "ecc852bf-22ea-4e91-80b0-423ce1f2117a",
+									"disabled": true
+								},
+								{
+									"key": "is_active",
+									"value": "true",
+									"disabled": true
+								},
+								{
+									"key": "price",
+									"value": "1000",
+									"disabled": true
+								},
+								{
+									"key": "features",
+									"value": "feature1",
+									"disabled": true
+								},
+								{
+									"key": "duration_days",
+									"value": "50",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-plans",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "internalserversecretapitoken",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Some plan\",\n    \"price\": 1000,\n    \"features\": [\n        \"feature1\", \"feature2\"\n    ],\n    \"duration_days\": 30\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8002/plans",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8002",
+							"path": [
+								"plans"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "internalserversecretapitoken",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Some plan new\",\n    \"price\": 1200,\n    \"features\": [\n        \"feature1\", \"feature2\", \"feature new\"\n    ],\n    \"duration_days\": 50\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8002/plans?id=ecc852bf-22ea-4e91-80b0-423ce1f2117a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8002",
+							"path": [
+								"plans"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "ecc852bf-22ea-4e91-80b0-423ce1f2117a"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-plan",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "internalserversecretapitoken",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8002/plans/ecc852bf-22ea-4e91-80b0-423ce1f2117a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8002",
+							"path": [
+								"plans",
+								"ecc852bf-22ea-4e91-80b0-423ce1f2117a"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Subscriptions",
+			"item": [
+				{
+					"name": "health",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8003/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8003",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-subscriptions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjgxOWZkMzctZTAwNC00YjM4LWFjMTEtYmU2OTE4YjU4NjIyIiwiZW1haWwiOiJrcmlzaGl2c2F4ZW5hMDRAZ21haWwuY29tIiwiZXhwIjoxNzQ4NDY4MTI0LCJpYXQiOjE3NDgzODE3MjR9.W282VxTGSxhDRDuXP2juVutG5G7U3IMcfw4vAXoqMag",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8003/subscriptions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8003",
+							"path": [
+								"subscriptions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-subscription",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNWY1MWUzNGMtMjY1Yi00YjIxLWJiMjMtMGUyYmZhZTg2ODRmIiwiZW1haWwiOiJhcmp1bnNheGVuYTA0QGdtYWlsLmNvbSIsImV4cCI6MTc0ODQ2NzY2MSwiaWF0IjoxNzQ4MzgxMjYxfQ.4oRjDB5VLrBCDc3zgkm-pBBf1deXTTFVNGgtCi4DBOI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"5f51e34c-265b-4b21-bb23-0e2bfae8684f\",\n    \"plan_id\": \"638b8f05-b6c9-400e-bc51-4fc85af3b2cb\",\n    \"status\": \"ACTIVE\",\n    \"start_date\": \"2025-05-28T00:00:00Z\",\n    \"end_date\": \"2026-05-28T00:00:00Z\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8003/subscriptions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8003",
+							"path": [
+								"subscriptions"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "auth error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"user_id\": \"2819fd37-e004-4b38-ac11-be6918b58622\",\n    \"plan_id\": \"638b8f05-b6c9-400e-bc51-4fc85af3b2cb\",\n    \"status\": \"ACTIVE\",\n    \"start_date\": \"2025-05-28T00:00:00Z\",\n    \"end_date\": \"2026-05-28T00:00:00Z\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8003/subscriptions",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8003",
+									"path": [
+										"subscriptions"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 27 May 2025 21:29:12 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "58"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"You can only create subscriptions for yourself\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update-subscription",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjgxOWZkMzctZTAwNC00YjM4LWFjMTEtYmU2OTE4YjU4NjIyIiwiZW1haWwiOiJrcmlzaGl2c2F4ZW5hMDRAZ21haWwuY29tIiwiZXhwIjoxNzQ4NDY3ODUwLCJpYXQiOjE3NDgzODE0NTB9.WQZEvCqrUh1pEt2YTIuxwKdX9JUcZ3ytxeuxS6yO9Z8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"status\": \"INACTIVE\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8003/subscriptions?id=b8dd4209-c0f9-42cb-b40b-8d862197c46a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8003",
+							"path": [
+								"subscriptions"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "b8dd4209-c0f9-42cb-b40b-8d862197c46a"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "auth error",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"status\": \"INACTIVE\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8003/subscriptions?id=b8dd4209-c0f9-42cb-b40b-8d862197c46a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8003",
+									"path": [
+										"subscriptions"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "b8dd4209-c0f9-42cb-b40b-8d862197c46a"
+										}
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 27 May 2025 21:31:20 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "54"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"You can only update your own subscriptions\"\n}"
+						}
+					]
+				},
+				{
+					"name": "delete-subscription",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjgxOWZkMzctZTAwNC00YjM4LWFjMTEtYmU2OTE4YjU4NjIyIiwiZW1haWwiOiJrcmlzaGl2c2F4ZW5hMDRAZ21haWwuY29tIiwiZXhwIjoxNzQ4NDY3OTc0LCJpYXQiOjE3NDgzODE1NzR9.psG8F0z_urB5VF4mniLNZquyYs0y7UrRtvKuan8LgpY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8003/subscriptions/b8dd4209-c0f9-42cb-b40b-8d862197c46a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8003",
+							"path": [
+								"subscriptions",
+								"b8dd4209-c0f9-42cb-b40b-8d862197c46a"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "auth error",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8003/subscriptions/b8dd4209-c0f9-42cb-b40b-8d862197c46a",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8003",
+									"path": [
+										"subscriptions",
+										"b8dd4209-c0f9-42cb-b40b-8d862197c46a"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 27 May 2025 21:34:56 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "54"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"error\": \"You can only delete your own subscriptions\"\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
