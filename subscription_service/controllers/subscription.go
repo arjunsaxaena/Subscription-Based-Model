@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"time"
 
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/models"
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/utils"
@@ -84,6 +85,20 @@ func (c *SubscriptionController) GetSubscription(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
+	}
+
+	for _, sub := range subscriptions {
+		if sub.Status != "EXPIRED" && time.Now().After(sub.EndDate) {
+			updates := map[string]interface{}{
+				"status": "EXPIRED",
+			}
+			_, err := c.repo.UpdateSubscription(sub.ID, updates)
+			if err != nil {
+				ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update subscription status"})
+				return
+			}
+			sub.Status = "EXPIRED"
+		}
 	}
 
 	ctx.JSON(http.StatusOK, subscriptions)
