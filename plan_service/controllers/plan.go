@@ -22,6 +22,12 @@ func NewPlanController() *PlanController {
 }
 
 func (c *PlanController) CreatePlan(ctx *gin.Context) {
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "Operation not permitted"})
+		return
+	}
+
 	var req map[string]interface{}
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body: " + err.Error()})
@@ -107,6 +113,12 @@ func (c *PlanController) GetPlan(ctx *gin.Context) {
 }
 
 func (c *PlanController) UpdatePlan(ctx *gin.Context) {
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "Operation not permitted"})
+		return
+	}
+
 	idStr := ctx.Query("id")
 	if idStr == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Plan ID is required"})
@@ -144,6 +156,12 @@ func (c *PlanController) UpdatePlan(ctx *gin.Context) {
 }
 
 func (c *PlanController) DeletePlan(ctx *gin.Context) {
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		ctx.JSON(http.StatusForbidden, gin.H{"error": "Operation not permitted"})
+		return
+	}
+
 	idStr := ctx.Param("id")
 	if idStr == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Plan ID is required"})

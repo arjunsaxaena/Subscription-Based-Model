@@ -28,6 +28,15 @@ func (c *SubscriptionController) CreateSubscription(ctx *gin.Context) {
 		return
 	}
 
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		authenticatedUserID := ctx.MustGet("userID").(uuid.UUID)
+		if subscription.UserID != authenticatedUserID {
+			ctx.JSON(http.StatusForbidden, gin.H{"error": "You can only create subscriptions for yourself"})
+			return
+		}
+	}
+
 	if err := utils.ValidateUserExists(subscription.UserID); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -54,6 +63,21 @@ func (c *SubscriptionController) CreateSubscription(ctx *gin.Context) {
 func (c *SubscriptionController) GetSubscription(ctx *gin.Context) {
 	var filter models.GetSubscriptionFilter
 
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		authenticatedUserID := ctx.MustGet("userID").(uuid.UUID)
+		filter.UserID = &authenticatedUserID
+	} else {
+		if userIDStr := ctx.Query("user_id"); userIDStr != "" {
+			userID, err := uuid.Parse(userIDStr)
+			if err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID format"})
+				return
+			}
+			filter.UserID = &userID
+		}
+	}
+
 	if idStr := ctx.Query("id"); idStr != "" {
 		id, err := uuid.Parse(idStr)
 		if err != nil {
@@ -61,15 +85,6 @@ func (c *SubscriptionController) GetSubscription(ctx *gin.Context) {
 			return
 		}
 		filter.ID = &id
-	}
-
-	if userIDStr := ctx.Query("user_id"); userIDStr != "" {
-		userID, err := uuid.Parse(userIDStr)
-		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID format"})
-			return
-		}
-		filter.UserID = &userID
 	}
 
 	if planIDStr := ctx.Query("plan_id"); planIDStr != "" {
@@ -117,6 +132,23 @@ func (c *SubscriptionController) UpdateSubscription(ctx *gin.Context) {
 		return
 	}
 
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		authenticatedUserID := ctx.MustGet("userID").(uuid.UUID)
+
+		// Verify subscription belongs to user
+		filter := models.GetSubscriptionFilter{ID: &id}
+		subscriptions, err := c.repo.GetSubscription(filter)
+		if err != nil || len(subscriptions) == 0 {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Subscription not found"})
+			return
+		}
+		if subscriptions[0].UserID != authenticatedUserID {
+			ctx.JSON(http.StatusForbidden, gin.H{"error": "You can only update your own subscriptions"})
+			return
+		}
+	}
+
 	var updates map[string]interface{}
 	if err := ctx.ShouldBindJSON(&updates); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -161,6 +193,23 @@ func (c *SubscriptionController) DeleteSubscription(ctx *gin.Context) {
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid subscription ID format"})
 		return
+	}
+
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		authenticatedUserID := ctx.MustGet("userID").(uuid.UUID)
+
+		// Verify subscription belongs to user
+		filter := models.GetSubscriptionFilter{ID: &id}
+		subscriptions, err := c.repo.GetSubscription(filter)
+		if err != nil || len(subscriptions) == 0 {
+			ctx.JSON(http.StatusNotFound, gin.H{"error": "Subscription not found"})
+			return
+		}
+		if subscriptions[0].UserID != authenticatedUserID {
+			ctx.JSON(http.StatusForbidden, gin.H{"error": "You can only delete your own subscriptions"})
+			return
+		}
 	}
 
 	if err := c.repo.DeleteSubscription(id); err != nil {

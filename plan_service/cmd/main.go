@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/auth"
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/database"
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/plan_service/controllers"
 	"github.com/gin-gonic/gin"
@@ -20,7 +21,6 @@ func main() {
 	defer database.Close()
 
 	router := gin.Default()
-
 	planController := controllers.NewPlanController()
 
 	router.GET("/health", func(c *gin.Context) {
@@ -29,12 +29,13 @@ func main() {
 		})
 	})
 
-	planRoutes := router.Group("/plans")
+	admin := router.Group("")
+	admin.Use(auth.AuthMiddleware())
 	{
-		planRoutes.POST("", planController.CreatePlan)
-		planRoutes.GET("", planController.GetPlan)
-		planRoutes.PATCH("", planController.UpdatePlan)
-		planRoutes.DELETE("/:id", planController.DeletePlan)
+		admin.GET("/plans", planController.GetPlan)
+		admin.POST("/plans", planController.CreatePlan)
+		admin.PATCH("/plans", planController.UpdatePlan)
+		admin.DELETE("/plans/:id", planController.DeletePlan)
 	}
 
 	port := os.Getenv("PLAN_SERVICE_PORT")

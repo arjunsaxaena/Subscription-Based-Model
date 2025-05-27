@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/auth"
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/models"
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/user_service/repository"
 	"github.com/gin-gonic/gin"
@@ -64,6 +65,21 @@ func (c *UserController) CreateUser(ctx *gin.Context) {
 }
 
 func (c *UserController) GetUser(ctx *gin.Context) {
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		userID := ctx.MustGet("userID").(uuid.UUID)
+		filter := models.GetUserFilter{
+			ID: &userID,
+		}
+		users, err := c.repo.GetUser(filter)
+		if err != nil {
+			ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get user: " + err.Error()})
+			return
+		}
+		ctx.JSON(http.StatusOK, users)
+		return
+	}
+
 	var filter models.GetUserFilter
 
 	if idStr := ctx.Query("id"); idStr != "" {
@@ -98,6 +114,21 @@ func (c *UserController) GetUser(ctx *gin.Context) {
 }
 
 func (c *UserController) UpdateUser(ctx *gin.Context) {
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		authenticatedUserID := ctx.MustGet("userID").(uuid.UUID)
+		idStr := ctx.Query("id")
+		id, err := uuid.Parse(idStr)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID format"})
+			return
+		}
+		if id != authenticatedUserID {
+			ctx.JSON(http.StatusForbidden, gin.H{"error": "You can only update your own profile"})
+			return
+		}
+	}
+
 	idStr := ctx.Query("id")
 	if idStr == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "User ID is required"})
@@ -156,6 +187,21 @@ func (c *UserController) UpdateUser(ctx *gin.Context) {
 }
 
 func (c *UserController) DeleteUser(ctx *gin.Context) {
+	isInternalServer := ctx.GetBool("isInternalServer")
+	if !isInternalServer {
+		authenticatedUserID := ctx.MustGet("userID").(uuid.UUID)
+		idStr := ctx.Param("id")
+		id, err := uuid.Parse(idStr)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid user ID format"})
+			return
+		}
+		if id != authenticatedUserID {
+			ctx.JSON(http.StatusForbidden, gin.H{"error": "You can only delete your own profile"})
+			return
+		}
+	}
+
 	idStr := ctx.Param("id")
 
 	if idStr == "" {
@@ -175,4 +221,44 @@ func (c *UserController) DeleteUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"success": true})
+}
+
+func (c *UserController) Login(ctx *gin.Context) {
+	var req models.LoginRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	filter := models.GetUserFilter{
+		Email: &req.Email,
+	}
+	users, err := c.repo.GetUser(filter)
+	if err != nil || len(users) == 0 {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		return
+	}
+
+	user := users[0]
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(req.Password))
+	if err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		return
+	}
+
+	token, err := auth.GenerateToken(user.ID, user.Email)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"token": token,
+		"user": map[string]interface{}{
+			"id":    user.ID,
+			"email": user.Email,
+			"name":  user.Name,
+		},
+	})
 }

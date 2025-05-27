@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/auth"
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/database"
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/user_service/controllers"
 	"github.com/gin-gonic/gin"
@@ -29,12 +30,15 @@ func main() {
 		})
 	})
 
-	userRoutes := router.Group("/users")
+	router.POST("/login", userController.Login)
+	router.POST("/users", userController.CreateUser) // would require 2FA to be protected
+
+	protected := router.Group("")
+	protected.Use(auth.AuthMiddleware())
 	{
-		userRoutes.POST("", userController.CreateUser)
-		userRoutes.GET("", userController.GetUser)
-		userRoutes.PATCH("", userController.UpdateUser)
-		userRoutes.DELETE("/:id", userController.DeleteUser)
+		protected.GET("/users", userController.GetUser)
+		protected.PATCH("/users", userController.UpdateUser)
+		protected.DELETE("/users/:id", userController.DeleteUser)
 	}
 
 	port := os.Getenv("USER_SERVICE_PORT")
@@ -46,4 +50,4 @@ func main() {
 	if err := router.Run(":" + port); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
-} 
+}

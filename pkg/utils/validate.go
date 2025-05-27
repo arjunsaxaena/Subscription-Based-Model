@@ -11,7 +11,20 @@ import (
 
 func ValidateUserExists(userID uuid.UUID) error {
     userServiceURL := os.Getenv("USER_SERVICE_URL")
-    resp, err := http.Get(fmt.Sprintf("%s/users?id=%s", userServiceURL, userID))
+    
+    req, err := http.NewRequest("GET", fmt.Sprintf("%s/users?id=%s", userServiceURL, userID), nil)
+    if err != nil {
+        return fmt.Errorf("failed to create request: %w", err)
+    }
+
+    internalToken := os.Getenv("INTERNAL_SERVER_TOKEN")
+    if internalToken == "" {
+        return fmt.Errorf("INTERNAL_SERVER_TOKEN not set")
+    }
+    req.Header.Set("Authorization", "Bearer "+internalToken)
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
     if err != nil {
         return fmt.Errorf("failed to validate user: %w", err)
     }
@@ -35,7 +48,20 @@ func ValidateUserExists(userID uuid.UUID) error {
 
 func ValidatePlanExists(planID uuid.UUID) error {
     planServiceURL := os.Getenv("PLAN_SERVICE_URL")
-    resp, err := http.Get(fmt.Sprintf("%s/plans?id=%s", planServiceURL, planID))
+    
+    req, err := http.NewRequest("GET", fmt.Sprintf("%s/plans?id=%s", planServiceURL, planID), nil)
+    if err != nil {
+        return fmt.Errorf("failed to create request: %w", err)
+    }
+
+    internalToken := os.Getenv("INTERNAL_SERVER_TOKEN")
+    if internalToken == "" {
+        return fmt.Errorf("INTERNAL_SERVER_TOKEN not set")
+    }
+    req.Header.Set("Authorization", "Bearer "+internalToken)
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
     if err != nil {
         return fmt.Errorf("failed to validate plan: %w", err)
     }

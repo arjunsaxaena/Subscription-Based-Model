@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/auth"
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/pkg/database"
 	"github.com/arjunsaxaena/Subscription-Based-Model.git/subscription_service/controllers"
 	"github.com/gin-gonic/gin"
@@ -30,6 +31,7 @@ func main() {
 	})
 
 	subscriptionRoutes := router.Group("/subscriptions")
+	subscriptionRoutes.Use(auth.AuthMiddleware())
 	{
 		subscriptionRoutes.POST("", subscriptionController.CreateSubscription)
 		subscriptionRoutes.GET("", subscriptionController.GetSubscription)
