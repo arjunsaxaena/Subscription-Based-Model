@@ -5,25 +5,26 @@ import (
 	"errors"
 
 	"github.com/google/uuid"
+	"github.com/lib/pq"
 )
 
 type Plan struct {
-	ID           uuid.UUID       `json:"id" db:"id"`
-	Name         string          `json:"name" db:"name"`
-	Price        float64         `json:"price" db:"price"`
-	Features     *[]string        `json:"features" db:"features"`
-	DurationDays int             `json:"duration_days" db:"duration_days"`
+	ID           uuid.UUID        `json:"id" db:"id"`
+	Name         string           `json:"name" db:"name"`
+	Price        float64          `json:"price" db:"price"`
+	Features     pq.StringArray   `json:"features,omitempty" db:"features"`
+	DurationDays int              `json:"duration_days" db:"duration_days"`
 	Meta         *json.RawMessage `json:"meta" db:"meta"`
 	BaseEntity
 } 
 
 type GetPlanFilter struct {
-	ID       *uuid.UUID `json:"id"`
-	Name     *string    `json:"name"`
-	Price    *float64   `json:"price"`
-	Features *[]string  `json:"features"`	
-	DurationDays *int `json:"duration_days"`
-	IsActive *bool `json:"is_active"`
+	ID          *uuid.UUID    `json:"id"`
+	Name        *string       `json:"name"`
+	Price       *float64      `json:"price"`
+	Features    *pq.StringArray `json:"features"`
+	DurationDays *int         `json:"duration_days"`
+	IsActive    *bool         `json:"is_active"`
 }
 
 func ValidatePlan(plan *Plan) error {
