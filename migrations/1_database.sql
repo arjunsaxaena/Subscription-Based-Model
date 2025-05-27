@@ -1,0 +1,3 @@
+CREATE DATABASE ql;
+
+\c ql;
